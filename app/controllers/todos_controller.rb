@@ -1,6 +1,11 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: [:edit, :update, :destroy]
+  before_action :set_todo, only: [:edit, :update, :destroy, :invert_checked]
+  after_action :broadcast_change, only: [:create, :update, :destroy, :invert_checked]
 
+  def invert_checked
+    @todo.update_attribute(:checked, !@todo.checked)
+    redirect_to list_path(@todo.list)
+  end
   # GET /todos
   # GET /todos.json
   def index
@@ -14,8 +19,8 @@ class TodosController < ApplicationController
   end
 
   # GET /todos/new
-  def new
-    @todo = Todo.new
+  def new    
+    @todo = Todo.new(:list_id => params[:list_id])
   end
 
   # GET /todos/1/edit
@@ -29,7 +34,7 @@ class TodosController < ApplicationController
     @todo.user_id = current_user.id
     respond_to do |format|
       if @todo.save
-        format.html { redirect_to todos_path, notice: 'Todo was successfully created.' }
+        format.html { redirect_to list_path(@todo.list), notice: 'Todo was successfully created.' }
         format.json { render :show, status: :created, location: @todo }
       else
         format.html { render :new }
@@ -43,7 +48,7 @@ class TodosController < ApplicationController
   def update
     respond_to do |format|
       if @todo.update(todo_params)
-        format.html { redirect_to @todo, notice: 'Todo was successfully updated.' }
+        format.html { redirect_to list_path(@todo.list), notice: 'Todo was successfully updated.' }
         format.json { render :show, status: :ok, location: @todo }
       else
         format.html { render :edit }
@@ -63,6 +68,10 @@ class TodosController < ApplicationController
   end
 
   private
+
+    def broadcast_change
+       ActionCable.server.broadcast 'todos', command: "refresh"        
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_todo
       # this will search todos of only current user, securing the project this way
@@ -71,6 +80,6 @@ class TodosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def todo_params
-      params.require(:todo).permit(:name, :checked)
+      params.require(:todo).permit(:name, :checked, :list_id)
     end
 end

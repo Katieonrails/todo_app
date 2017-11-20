@@ -14,7 +14,7 @@
 
 <%= link_to t('.back', :default => t("helpers.links.back")),
               todos_path, :class => 'btn btn-default'  %>
-<% if current_user && current_user.id == @todo.id %>              
+<% if current_user && current_user.id == @todo.user_id %>              
 <%= link_to t('.edit', :default => t("helpers.links.edit")),
               edit_todo_path(@todo), :class => 'btn btn-default' %>
 <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
