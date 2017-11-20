@@ -1,5 +1,5 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: [:show, :edit, :update, :destroy]
+  before_action :set_todo, only: [:edit, :update, :destroy]
 
   # GET /todos
   # GET /todos.json
@@ -10,6 +10,7 @@ class TodosController < ApplicationController
   # GET /todos/1
   # GET /todos/1.json
   def show
+    @todo = Todo.find(params[:id]) #not through before filter as we're checking there for user, in show it's read only so it's safe to show to all
   end
 
   # GET /todos/new
@@ -28,7 +29,7 @@ class TodosController < ApplicationController
     @todo.user_id = current_user.id
     respond_to do |format|
       if @todo.save
-        format.html { redirect_to @todo, notice: 'Todo was successfully created.' }
+        format.html { redirect_to todos_path, notice: 'Todo was successfully created.' }
         format.json { render :show, status: :created, location: @todo }
       else
         format.html { render :new }
@@ -64,11 +65,12 @@ class TodosController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_todo
+      # this will search todos of only current user, securing the project this way
       @todo = current_user.todos.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def todo_params
-      params.require(:todo).permit(:name, :checked, :user_id)
+      params.require(:todo).permit(:name, :checked)
     end
 end
