@@ -1,24 +1,10 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Prosta aplikacja ToDo, która pozwoli na pracę na kilkoma projektami jednocześnie. 
 
-Things you may want to cover:
+Aplikacja jest prosta, łatwa i utrzymana w minimalistycznym stylu. 
+Nie została jeszcze odpowiednio zoptymalizowana, ale skutecznie może być używana jako DEMO głównego produktu, którego premiara już niebawem :) 
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Każdy użytkownik może stworzyć swoje własne konto poprzez rejstrację. 
+Następnie zalogować i tworzyć swoje własne projekty, a w nich tworzyć listę zadań do wykonania. Po wykonaniu zadań zaznaczamy je jako zrobione ;) 
+Możemy jako zalogowani użytkownicy wysyłać link do swojej listy. Osoby, które mają linki widzą listę zadań do wykonania i projekty, ale nie mogą nanosić na nich zmian. 
